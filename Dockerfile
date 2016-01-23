@@ -108,7 +108,7 @@ RUN python setup.py install
 
 RUN git clone https://github.com/SIPp/sipp.git /usr/src/sipp
 WORKDIR /usr/src/sipp
-RUN ./build.sh --full && make installl
+RUN ./build.sh --full && make install
 
 #   CLEANUP
 RUN apt-get clean all
