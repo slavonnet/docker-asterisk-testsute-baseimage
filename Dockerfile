@@ -64,6 +64,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && apt-get update -y --force-yes && ap
 		subversion \
 		unixodbc-dev \
 		uuid \
+		xmlstarlet \
 		uuid-dev && \
 	apt-get clean all
 
