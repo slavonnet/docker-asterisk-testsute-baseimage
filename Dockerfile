@@ -7,8 +7,8 @@ ENV pjproject_branch=master
 ENV testsute_branch=master
 ENV sipp_branch=master
 
-RUN apt-get update -y && apt-get dist-upgrade -y && \
-	DEBIAN_FRONTEND=noninteractive apt-get install -qq -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" \
+RUN DEBIAN_FRONTEND=noninteractive apt-get update -y && apt-get dist-upgrade -y && \
+	apt-get install -qq -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" \
 		autoconf \
 		binutils-dev \
 		build-essential \
