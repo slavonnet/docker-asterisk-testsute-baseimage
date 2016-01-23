@@ -26,8 +26,6 @@ RUN export DEBIAN_FRONTEND=noninteractive && apt-get update -y --force-yes && ap
 		libgmime-2.6-dev \
 		libgsl0-dev \
 		libgsm1-dev \
-		libgtk2.0-dev \
-		libh323plus-dev \
 		libical-dev \
 		libiksemel-dev \
 		libjack-dev \
@@ -36,7 +34,6 @@ RUN export DEBIAN_FRONTEND=noninteractive && apt-get update -y --force-yes && ap
 		liblua5.1-dev \
 		liblua5.2-dev \
 		libmysqlclient-dev \
-		libmysqlclient15-dev \
 		libncurses-dev \
 		libneon27-dev \
 		libnewt-dev \
@@ -50,9 +47,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && apt-get update -y --force-yes && ap
 		libspandsp-dev \
 		libspeex-dev \
 		libspeexdsp-dev \
-		libsqlite0-dev \
 		libsqlite3-dev \
-		libsrtp-dev \
 		libssl-dev \
 		libusb-dev \
 		libvorbis-dev \
@@ -62,8 +57,6 @@ RUN export DEBIAN_FRONTEND=noninteractive && apt-get update -y --force-yes && ap
 		libz-dev \
 		lua5.2 \
 		lua5.1 \
-		libpt-dev \
-		portaudio19-dev \
 		python-dev \
 		python-setuptools \
 		python-twisted \
