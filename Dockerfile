@@ -7,7 +7,7 @@ ENV pjproject_branch=master
 ENV testsute_branch=master
 ENV sipp_branch=master
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get update -y && apt-get dist-upgrade -y && \
+RUN export DEBIAN_FRONTEND=noninteractive && apt-get update -y --force-yes && apt-get dist-upgrade -y --force-yes && \
 	apt-get install -qq -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" \
 		autoconf \
 		binutils-dev \
@@ -80,7 +80,8 @@ RUN git clone https://github.com/cisco/libsrtp.git /usr/src/libsrtp && \
 	cd /usr/src/libsrtp && \
 	git checkout tags/${libsrtp_tag} -B ${libsrtp_tag} && \
 	./configure --enable-openssl --prefix=/usr && \
-	make -j"$(nproc)" && make libsrtp.so.1 && make install && ldconfig
+	make -j"$(nproc)" && make libsrtp.so.1 && make install && ldconfig && \
+	rm -rf /usr/src/libsrtp
 
 ### PJSIP MASTER
 
@@ -93,7 +94,8 @@ RUN git clone https://github.com/asterisk/pjproject /usr/src/pjproject && \
 	echo "#define PJ_HAS_IPV6 1" >> pjlib/include/pj/config_site.h && \
 	make  -j"$(nproc)" dep && make  -j"$(nproc)" && make install && \
 	cp pjsip-apps/bin/pjsua-x86_64-unknown-linux-gnu /usr/sbin/pjsua && \
-	make -C pjsip-apps/src/python install && ldconfig 
+	make -C pjsip-apps/src/python install && ldconfig && \
+	rm -rf /usr/src/pjproject
 
 ### ASTERISK TEST SUTE
 
@@ -110,8 +112,7 @@ RUN git clone https://gerrit.asterisk.org/testsuite /usr/src/testsute && \
 
 RUN git clone https://github.com/SIPp/sipp.git /usr/src/sipp && \
 	cd /usr/src/sipp && \
-	./build.sh --full && make install && 
+	./build.sh --full && make install && \
+	rm -rf /usr/src/sipp
 
-#   CLEANUP
-RUN rm -rf /usr/src/pjproject /usr/src/sipp /usr/src/libsrtp
 
