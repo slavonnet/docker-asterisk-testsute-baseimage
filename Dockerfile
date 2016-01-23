@@ -76,7 +76,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && apt-get update -y --force-yes && ap
 
 ### LIBSRTP 1.5+
 
-RUN git clone https://github.com/cisco/libsrtp.git /usr/src/libsrtp && \
+ONBUILD RUN git clone https://github.com/cisco/libsrtp.git /usr/src/libsrtp && \
 	cd /usr/src/libsrtp && \
 	git checkout tags/${libsrtp_tag} -B ${libsrtp_tag} && \
 	./configure --enable-openssl --prefix=/usr && \
@@ -85,7 +85,7 @@ RUN git clone https://github.com/cisco/libsrtp.git /usr/src/libsrtp && \
 
 ### PJSIP MASTER
 
-RUN git clone https://github.com/asterisk/pjproject /usr/src/pjproject && \
+ONBUILD RUN git clone https://github.com/asterisk/pjproject /usr/src/pjproject && \
 	cd /usr/src/pjproject && \
 	git checkout -B ${pjproject_branch} && \
 	./configure --enable-shared --with-external-srtp --prefix=/usr && \
@@ -99,7 +99,7 @@ RUN git clone https://github.com/asterisk/pjproject /usr/src/pjproject && \
 
 ### ASTERISK TEST SUTE
 
-RUN git clone https://gerrit.asterisk.org/testsuite /usr/src/testsute && \
+ONBUILD  RUN git clone https://gerrit.asterisk.org/testsuite /usr/src/testsute && \
 	cd /usr/src/testsute/asttest && \
 	git checkout -B ${testsute_branch} && \
 	make  -j"$(nproc)" && make install && \
@@ -110,7 +110,7 @@ RUN git clone https://gerrit.asterisk.org/testsuite /usr/src/testsute && \
 
 ### SIP-P
 
-RUN git clone https://github.com/SIPp/sipp.git /usr/src/sipp && \
+ONBUILD  RUN git clone https://github.com/SIPp/sipp.git /usr/src/sipp && \
 	cd /usr/src/sipp && \
 	./build.sh --full && make install && \
 	rm -rf /usr/src/sipp
