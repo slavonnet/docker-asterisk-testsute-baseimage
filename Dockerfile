@@ -2,10 +2,10 @@ FROM gcc
 
 MAINTAINER Badalyan Vyacheslav <v.badalyan@open-bs.ru>
 
-ARG libsrtp_tag=v1.5.3
-ARG pjproject_branch=master
-ARG testsute_branch=master
-ARG sipp_branch=master
+ENV libsrtp_tag=v1.5.3
+ENV pjproject_branch=master
+ENV testsute_branch=master
+ENV sipp_branch=master
 
 RUN apt-get update -y && apt-get dist-upgrade -y
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -qq -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" \
@@ -33,6 +33,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -qq -y -o Dpkg::Options::="--
 	libjack-dev \
 	libjansson-dev \
 	libldap-dev \
+	liblua5.1-dev \
 	liblua5.2-dev \
 	libmysqlclient-dev \
 	libmysqlclient15-dev \
@@ -60,6 +61,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -qq -y -o Dpkg::Options::="--
 	libxslt1-dev \
 	libz-dev \
 	lua5.2 \
+	lua5.1 \
 	portaudio19-dev \
 	python-dev \
 	python-setuptools \
@@ -78,7 +80,6 @@ RUN git checkout tags/${libsrtp_tag} -B ${libsrtp_tag}
 RUN ./configure --enable-openssl --prefix=/usr
 RUN make -j"$(nproc)" && make libsrtp.so.1 && make install && ldconfig
 
-
 ### PJSIP MASTER
 
 RUN git clone https://github.com/asterisk/pjproject /usr/src/pjproject
@@ -92,7 +93,6 @@ RUN make  -j"$(nproc)" dep && make  -j"$(nproc)" && make install
 RUN cp pjsip-apps/bin/pjsua-x86_64-unknown-linux-gnu /usr/sbin/pjsua
 RUN make -C pjsip-apps/src/python install && ldconfig
 
-
 ### ASTERISK TEST SUTE
 
 RUN git clone https://gerrit.asterisk.org/testsuite /usr/src/testsute
@@ -104,31 +104,13 @@ RUN make update
 WORKDIR starpy
 RUN python setup.py install
 
-
 ### SIP-P
 
 RUN git clone https://github.com/SIPp/sipp.git /usr/src/sipp
 WORKDIR /usr/src/sipp
 RUN ./build.sh --full && make installl
 
-### ASTERISK INSTALL
-WORKDIR /usr/src/asterisk
-RUN git checkout -B ${sipp_branch}
-RUN ./configure  --prefix=/usr --enable-dev-mode
-RUN make menuselect.makeopts
-RUN menuselect/menuselect --enable ADDRESS_SANITIZER --enable-category MENUSELECT_TESTS --enable DONT_OPTIMIZE --enable TEST_FRAMEWORK menuselect.makeopts
-RUN make -j"$(nproc)" make install && make config && make samples
-
-
-#CLEANUP for size!
+#   CLEANUP
 RUN apt-get clean all
 RUN rm -rf /usr/src/pjproject /usr/src/sipp /usr/src/libsrtp
-
-### RUN TEST!!
-
-#WORKDIR /usr/src/testsute
-#ENTRYPOINT ./runtests.py -l
-#CMD ["-c"]
-
-
 
