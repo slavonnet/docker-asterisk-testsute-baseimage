@@ -1,0 +1,1 @@
+# docker-asterisk-testsute-baseimage
