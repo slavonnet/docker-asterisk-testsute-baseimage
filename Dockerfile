@@ -62,6 +62,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -qq -y -o Dpkg::Options::="--
 	libz-dev \
 	lua5.2 \
 	lua5.1 \
+	libpt-dev \
 	portaudio19-dev \
 	python-dev \
 	python-setuptools \
