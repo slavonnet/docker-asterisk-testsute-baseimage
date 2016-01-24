@@ -98,9 +98,10 @@ ONBUILD RUN git clone https://github.com/asterisk/pjproject /usr/src/pjproject &
 ### ASTERISK TEST SUTE
 
 ONBUILD  RUN git clone https://gerrit.asterisk.org/testsuite /usr/src/testsute && \
-	cd /usr/src/testsute/asttest && \
+	cd /usr/src/testsute && \
 	git checkout -B ${testsute_branch} && \
-	make  -j${proc} && make install && \
+	cd /usr/src/testsute/asttest && \
+	make && make install && \
 	cd /usr/src/testsute/addons && \
 	make update && \
 	cd starpy && \
