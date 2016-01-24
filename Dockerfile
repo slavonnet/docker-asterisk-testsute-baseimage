@@ -70,7 +70,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && apt-get update -y --force-yes && ap
 		uuid-dev && \
 	apt-get clean all
 
-ENV NPROC 32
+ENV proc=32
 
 ### LIBSRTP 1.5+
 
@@ -78,7 +78,7 @@ ONBUILD RUN git clone https://github.com/cisco/libsrtp.git /usr/src/libsrtp && \
 	cd /usr/src/libsrtp && \
 	git checkout tags/${libsrtp_tag} -B ${libsrtp_tag} && \
 	./configure --enable-openssl --prefix=/usr && \
-	make -j"($NPROC)" && make libsrtp.so.1 && make install && ldconfig && \
+	make -j${proc} && make libsrtp.so.1 && make install && ldconfig && \
 	rm -rf /usr/src/libsrtp
 
 ### PJSIP MASTER
@@ -90,7 +90,7 @@ ONBUILD RUN git clone https://github.com/asterisk/pjproject /usr/src/pjproject &
 	echo CFLAGS+=-g > user.mak && \
 	cp pjlib/include/pj/config_site_sample.h pjlib/include/pj/config_site.h && \
 	echo "#define PJ_HAS_IPV6 1" >> pjlib/include/pj/config_site.h && \
-	make  -j"($NPROC)" dep && make  -j"$(nproc)" && make install && \
+	make  -j{$proc} dep && make  -j{$proc} && make install && \
 	cp pjsip-apps/bin/pjsua-x86_64-unknown-linux-gnu /usr/sbin/pjsua && \
 	make -C pjsip-apps/src/python install && ldconfig && \
 	rm -rf /usr/src/pjproject
@@ -100,7 +100,7 @@ ONBUILD RUN git clone https://github.com/asterisk/pjproject /usr/src/pjproject &
 ONBUILD  RUN git clone https://gerrit.asterisk.org/testsuite /usr/src/testsute && \
 	cd /usr/src/testsute/asttest && \
 	git checkout -B ${testsute_branch} && \
-	make  -j"($NPROC)" && make install && \
+	make  -j{$proc} && make install && \
 	cd /usr/src/testsute/addons && \
 	make update && \
 	cd starpy && \
