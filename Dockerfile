@@ -57,6 +57,8 @@ RUN export DEBIAN_FRONTEND=noninteractive && apt-get update -y --force-yes && ap
 		libz-dev \
 		lua5.2 \
 		lua5.1 \
+		python-autobahn \
+		python-requests \
 		python-dev \
 		python-setuptools \
 		python-twisted \
