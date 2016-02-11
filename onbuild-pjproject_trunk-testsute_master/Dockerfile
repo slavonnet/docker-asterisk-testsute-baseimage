@@ -3,7 +3,7 @@ FROM gcc
 MAINTAINER Badalyan Vyacheslav <v.badalyan@open-bs.ru>
 
 ENV libsrtp_tag=v1.5.4
-ENV pjproject_branch=trunk
+ENV pjproject_branch=tags/2.4.5
 ENV testsute_branch=master
 ENV sipp_branch=master
 
@@ -67,7 +67,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && apt-get update -y --force-yes && ap
 		unixodbc-dev \
 		uuid \
 		xmlstarlet \
-		svn \
+		subversion \
 		uuid-dev && \
 	apt-get clean all
 
@@ -92,10 +92,7 @@ ONBUILD RUN git clone -b tags/${libsrtp_tag} --depth 1 https://github.com/cisco/
 
 ONBUILD RUN svn co http://svn.pjsip.org/repos/pjproject/${pjproject_branch} /usr/src/pjproject && \
 	cd /usr/src/pjproject && \
-	./configure --enable-shared --with-external-srtp --prefix=/usr && \
-	echo CFLAGS+=-g > user.mak && \
-	cp pjlib/include/pj/config_site_sample.h pjlib/include/pj/config_site.h && \
-	echo "#define PJ_HAS_IPV6 1" >> pjlib/include/pj/config_site.h && \
+	./configure --enable-shared --with-external-srtp --disable-sound --disable-resample --disable-video --disable-opencore-amr --prefix=/usr CFLAGS='-DPJ_HAS_IPV6=1 -O2 -g'  && \
 	make -j${proc} dep && make -j${proc} && make install && \
 	cp pjsip-apps/bin/pjsua-x86_64-unknown-linux-gnu /usr/sbin/pjsua && \
 	make -C pjsip-apps/src/python install && ldconfig && \
