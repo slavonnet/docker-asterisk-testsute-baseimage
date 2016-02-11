@@ -2,8 +2,8 @@ FROM gcc
 
 MAINTAINER Badalyan Vyacheslav <v.badalyan@open-bs.ru>
 
-ENV libsrtp_tag=v1.5.3
-ENV pjproject_branch=master
+ENV libsrtp_tag=v1.5.4
+ENV pjproject_branch=tags/2.4.5
 ENV testsute_branch=master
 ENV sipp_branch=master
 
@@ -67,25 +67,31 @@ RUN export DEBIAN_FRONTEND=noninteractive && apt-get update -y --force-yes && ap
 		unixodbc-dev \
 		uuid \
 		xmlstarlet \
+		svn \
 		uuid-dev && \
 	apt-get clean all
 
 ENV proc=32
 
-### LIBSRTP 1.5+
+### SIP-P
 
-ONBUILD RUN git clone https://github.com/cisco/libsrtp.git /usr/src/libsrtp && \
+RUN git clone -b ${sipp_branch} --depth 1 https://github.com/SIPp/sipp.git /usr/src/sipp && \
+	cd /usr/src/sipp && \
+	./build.sh --full && make install && \
+	rm -rf /usr/src/sipp
+
+### LIBSRTP 
+
+ONBUILD RUN git clone -b tags/${libsrtp_tag} --depth 1 https://github.com/cisco/libsrtp.git /usr/src/libsrtp && \
 	cd /usr/src/libsrtp && \
-	git checkout tags/${libsrtp_tag} -B ${libsrtp_tag} && \
 	./configure --enable-openssl --prefix=/usr && \
 	make -j${proc} && make libsrtp.so.1 && make install && ldconfig && \
 	rm -rf /usr/src/libsrtp
 
-### PJSIP MASTER
+### PJPROJECT
 
-ONBUILD RUN git clone https://github.com/asterisk/pjproject /usr/src/pjproject && \
+ONBUILD RUN svn co http://svn.pjsip.org/repos/pjproject/${pjproject_branch} /usr/src/pjproject && \
 	cd /usr/src/pjproject && \
-	git checkout -B ${pjproject_branch} && \
 	./configure --enable-shared --with-external-srtp --prefix=/usr && \
 	echo CFLAGS+=-g > user.mak && \
 	cp pjlib/include/pj/config_site_sample.h pjlib/include/pj/config_site.h && \
@@ -97,21 +103,12 @@ ONBUILD RUN git clone https://github.com/asterisk/pjproject /usr/src/pjproject &
 
 ### ASTERISK TEST SUTE
 
-ONBUILD  RUN git clone https://gerrit.asterisk.org/testsuite /usr/src/testsute && \
-	cd /usr/src/testsute && \
-	git checkout -B ${testsute_branch} && \
+ONBUILD  RUN git clone -b ${testsute_branch} --depth 1 https://gerrit.asterisk.org/testsuite /usr/src/testsute && \
 	cd /usr/src/testsute/asttest && \
 	make && make install && \
 	cd /usr/src/testsute/addons && \
 	make update && \
 	cd starpy && \
 	python setup.py install
-
-### SIP-P
-
-ONBUILD  RUN git clone https://github.com/SIPp/sipp.git /usr/src/sipp && \
-	cd /usr/src/sipp && \
-	./build.sh --full && make install && \
-	rm -rf /usr/src/sipp
 
 
