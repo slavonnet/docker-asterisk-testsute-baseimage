@@ -82,7 +82,7 @@ RUN git clone -b ${sipp_branch} --depth 1 https://github.com/SIPp/sipp.git /usr/
 
 ### LIBSRTP 
 
-ONBUILD RUN git clone -b tags/${libsrtp_tag} --depth 1 https://github.com/cisco/libsrtp.git /usr/src/libsrtp && \
+ONBUILD RUN git clone -b ${libsrtp_tag} --depth 1 https://github.com/cisco/libsrtp.git /usr/src/libsrtp && \
 	cd /usr/src/libsrtp && \
 	./configure --enable-openssl --prefix=/usr && \
 	make -j${proc} && make libsrtp.so.1 && make install && ldconfig && \
