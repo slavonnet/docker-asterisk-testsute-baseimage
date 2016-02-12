@@ -3,7 +3,7 @@ FROM gcc
 MAINTAINER Badalyan Vyacheslav <v.badalyan@open-bs.ru>
 
 ENV libsrtp_tag=v1.5.4
-ENV pjproject_branch=tags/2.4.5
+ENV pjproject_branch=trunk
 ENV testsute_branch=master
 ENV sipp_branch=master
 
