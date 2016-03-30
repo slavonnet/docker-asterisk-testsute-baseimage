@@ -5,7 +5,7 @@ MAINTAINER Badalyan Vyacheslav <v.badalyan@open-bs.ru>
 ENV libsrtp_tag=v1.5.4
 ENV pjproject_branch=tags/2.4.5
 ENV testsute_branch=master
-ENV sipp_branch=master
+ENV sipp_branch=branch/3.5
 
 RUN export DEBIAN_FRONTEND=noninteractive && apt-get update -y --force-yes && apt-get dist-upgrade -y --force-yes && \
 	apt-get install -qq -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" \
