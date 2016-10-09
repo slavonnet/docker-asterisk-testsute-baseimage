@@ -3,9 +3,9 @@ FROM gcc
 MAINTAINER Badalyan Vyacheslav <v.badalyan@open-bs.ru>
 
 ENV libsrtp_tag=v1.5.4
-ENV pjproject_branch=tags/2.4.5
+ENV pjproject_branch=tags/2.5.5
 ENV testsute_branch=master
-ENV sipp_branch=branch/3.5
+ENV sipp_tag=v3.5.1
 
 RUN export DEBIAN_FRONTEND=noninteractive && apt-get update -y --force-yes && apt-get dist-upgrade -y --force-yes && \
 	apt-get install -qq -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" \
@@ -75,7 +75,7 @@ ENV proc=32
 
 ### SIP-P
 
-RUN git clone -b ${sipp_branch} --depth 1 https://github.com/SIPp/sipp.git /usr/src/sipp && \
+ONBUILD RUN git clone -b ${sipp_tag} --depth 1 https://github.com/SIPp/sipp.git /usr/src/sipp && \
 	cd /usr/src/sipp && \
 	./build.sh --full && make install && \
 	rm -rf /usr/src/sipp
