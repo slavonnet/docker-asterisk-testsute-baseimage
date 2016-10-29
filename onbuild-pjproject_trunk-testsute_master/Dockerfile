@@ -71,8 +71,6 @@ RUN export DEBIAN_FRONTEND=noninteractive && apt-get update -y --force-yes && ap
 	apt-get clean all && \
 	rm -rf /var/lib/apt/lists/*
 
-ENV proc=32
-
 ### SIP-P
 
 RUN git clone -b ${sipp_tag} --depth 1 https://github.com/SIPp/sipp.git /usr/src/sipp && \
@@ -85,7 +83,7 @@ RUN git clone -b ${sipp_tag} --depth 1 https://github.com/SIPp/sipp.git /usr/src
 RUN git clone -b ${libsrtp_tag} --depth 1 https://github.com/cisco/libsrtp.git /usr/src/libsrtp && \
 	cd /usr/src/libsrtp && \
 	./configure --enable-openssl --prefix=/usr && \
-	make -j${proc} && make libsrtp.so.1 && make install && ldconfig && \
+	make && make libsrtp.so.1 && make install && ldconfig && \
 	rm -rf /usr/src/libsrtp
 
 ### PJPROJECT
@@ -93,7 +91,7 @@ RUN git clone -b ${libsrtp_tag} --depth 1 https://github.com/cisco/libsrtp.git /
 RUN svn co http://svn.pjsip.org/repos/pjproject/${pjproject_branch} /usr/src/pjproject && \
 	cd /usr/src/pjproject && \
 	./configure --enable-shared --with-external-srtp --disable-sound --disable-resample --disable-video --disable-opencore-amr --prefix=/usr CFLAGS='-DPJ_HAS_IPV6=1 -O2 -g'  && \
-	make -j${proc} dep && make -j${proc} && make install && \
+	make dep && make && make install && \
 	cp pjsip-apps/bin/pjsua-x86_64-unknown-linux-gnu /usr/sbin/pjsua && \
 	make -C pjsip-apps/src/python install && ldconfig && \
 	rm -rf /usr/src/pjproject
