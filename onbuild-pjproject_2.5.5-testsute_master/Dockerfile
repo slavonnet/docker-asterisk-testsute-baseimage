@@ -67,6 +67,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && apt-get update -y --force-yes && ap
 		uuid \
 		xmlstarlet \
 		subversion \
+		psmisc &&  \
 		uuid-dev && \
 	apt-get clean all && \
 	rm -rf /var/lib/apt/lists/*
