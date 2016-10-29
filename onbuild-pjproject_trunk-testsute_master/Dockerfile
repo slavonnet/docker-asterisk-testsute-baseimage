@@ -75,14 +75,14 @@ ENV proc=32
 
 ### SIP-P
 
-ONBUILD RUN git clone -b ${sipp_tag} --depth 1 https://github.com/SIPp/sipp.git /usr/src/sipp && \
+RUN git clone -b ${sipp_tag} --depth 1 https://github.com/SIPp/sipp.git /usr/src/sipp && \
 	cd /usr/src/sipp && \
 	./build.sh --full && make install && \
 	rm -rf /usr/src/sipp
 
 ### LIBSRTP 
 
-ONBUILD RUN git clone -b ${libsrtp_tag} --depth 1 https://github.com/cisco/libsrtp.git /usr/src/libsrtp && \
+RUN git clone -b ${libsrtp_tag} --depth 1 https://github.com/cisco/libsrtp.git /usr/src/libsrtp && \
 	cd /usr/src/libsrtp && \
 	./configure --enable-openssl --prefix=/usr && \
 	make -j${proc} && make libsrtp.so.1 && make install && ldconfig && \
@@ -90,7 +90,7 @@ ONBUILD RUN git clone -b ${libsrtp_tag} --depth 1 https://github.com/cisco/libsr
 
 ### PJPROJECT
 
-ONBUILD RUN svn co http://svn.pjsip.org/repos/pjproject/${pjproject_branch} /usr/src/pjproject && \
+RUN svn co http://svn.pjsip.org/repos/pjproject/${pjproject_branch} /usr/src/pjproject && \
 	cd /usr/src/pjproject && \
 	./configure --enable-shared --with-external-srtp --disable-sound --disable-resample --disable-video --disable-opencore-amr --prefix=/usr CFLAGS='-DPJ_HAS_IPV6=1 -O2 -g'  && \
 	make -j${proc} dep && make -j${proc} && make install && \
@@ -100,7 +100,7 @@ ONBUILD RUN svn co http://svn.pjsip.org/repos/pjproject/${pjproject_branch} /usr
 
 ### ASTERISK TEST SUTE
 
-ONBUILD  RUN git clone -b ${testsute_branch} --depth 1 https://gerrit.asterisk.org/testsuite /usr/src/testsute && \
+ONBUILD RUN git clone -b ${testsute_branch} --depth 1 https://gerrit.asterisk.org/testsuite /usr/src/testsute && \
 	cd /usr/src/testsute/asttest && \
 	make && make install && \
 	cd /usr/src/testsute/addons && \
