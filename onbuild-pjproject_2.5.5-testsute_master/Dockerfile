@@ -4,7 +4,6 @@ MAINTAINER Badalyan Vyacheslav <v.badalyan@open-bs.ru>
 
 ENV libsrtp_tag=v1.5.4
 ENV pjproject_branch=tags/2.5.5
-ENV testsute_branch=master
 ENV sipp_tag=v3.5.1
 
 RUN export DEBIAN_FRONTEND=noninteractive && apt-get update -y --force-yes && apt-get dist-upgrade -y --force-yes && \
@@ -97,15 +96,5 @@ RUN svn co http://svn.pjsip.org/repos/pjproject/${pjproject_branch} /usr/src/pjp
 	cp pjsip-apps/bin/pjsua-x86_64-unknown-linux-gnu /usr/sbin/pjsua && \
 	make -C pjsip-apps/src/python install && ldconfig && \
 	rm -rf /usr/src/pjproject
-
-### ASTERISK TEST SUTE
-
-RUN git clone -b ${testsute_branch} --depth 1 https://gerrit.asterisk.org/testsuite /usr/src/testsute && \
-	cd /usr/src/testsute/asttest && \
-	make && make install && \
-	cd /usr/src/testsute/addons && \
-	make update && \
-	cd starpy && \
-	python setup.py install
 
 
