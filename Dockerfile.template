@@ -90,7 +90,7 @@ RUN git clone -b ${libsrtp_tag} --depth 1 https://github.com/cisco/libsrtp.git /
 
 RUN svn co http://svn.pjsip.org/repos/pjproject/${pjproject_branch} /usr/src/pjproject && \
 	cd /usr/src/pjproject && \
-	./configure --enable-shared --with-external-srtp --disable-sound --disable-resample --disable-video --disable-opencore-amr --prefix=/usr CFLAGS='-DPJ_HAS_IPV6=1 -O2 -g'  && \
+	./configure --enable-shared --with-external-srtp --disable-sound --disable-resample --disable-video --disable-opencore-amr --prefix=/usr CFLAGS='-DPJ_HAS_IPV6=1 -O2 -g -DTLSEXT_nid_unknown=0x1000000'  && \
 	make dep && make && make install && \
 	cp pjsip-apps/bin/pjsua-x86_64-unknown-linux-gnu /usr/sbin/pjsua && \
 	make -C pjsip-apps/src/python install && ldconfig && \
