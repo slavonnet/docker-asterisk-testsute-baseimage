@@ -100,7 +100,7 @@ RUN svn co http://svn.pjsip.org/repos/pjproject/${pjproject_branch} /usr/src/pjp
 
 ### ASTERISK TEST SUTE
 
-ONBUILD RUN git clone -b ${testsute_branch} --depth 1 https://gerrit.asterisk.org/testsuite /usr/src/testsute && \
+RUN git clone -b ${testsute_branch} --depth 1 https://gerrit.asterisk.org/testsuite /usr/src/testsute && \
 	cd /usr/src/testsute/asttest && \
 	make && make install && \
 	cd /usr/src/testsute/addons && \
