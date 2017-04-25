@@ -3,7 +3,7 @@ FROM gcc
 MAINTAINER Badalyan Vyacheslav <v.badalyan@open-bs.ru>
 
 ENV libsrtp_tag=v1.5.4
-ENV pjproject_branch=tags/2.5.5
+ENV pjproject_branch=tags/2.6
 ENV sipp_tag=v3.5.1
 
 RUN export DEBIAN_FRONTEND=noninteractive && apt-get update -y --force-yes && apt-get dist-upgrade -y --force-yes && \
